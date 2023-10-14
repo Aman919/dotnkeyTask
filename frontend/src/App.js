@@ -17,13 +17,13 @@ const App = () => {
   };
 
   const [formValues, setFormValues] = useState(initialValues);
-  // const [formErrors, setFormErrors] = useState({});
-  // const [isSubmit, setIsSubmit] = useState(false);
+  const [formErrors, setFormErrors] = useState({});
+  const [isSubmit, setIsSubmit] = useState(false);
 
   //Options for country, state, city
   const countryOptions = [
     { value: "india", label: "India" },
-    { value: "canada", label: "USA" },
+    { value: "canada", label: "Canada" },
     { value: "usa", label: "USA" },
   ];
   const stateOptions = [
@@ -50,7 +50,6 @@ const App = () => {
   const animatedComponenets = makeAnimated();
 
   const handleChange = (name, value) => {
-    const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
   };
 
@@ -58,6 +57,10 @@ const App = () => {
     e.preventDefault();
     setFormErrors(validate(formValues));
     setIsSubmit(true);
+  };
+
+  const handleLanguageChange = (selectedLanguage) => {
+    setFormValues({ ...formValues, language: selectedLanguage });
   };
 
   useEffect(() => {
@@ -132,7 +135,7 @@ const App = () => {
               placeholder="Password"
               value={formValues.password}
               onChange={(e) => {
-                "password", e.target.value;
+                handleChange("password", e.target.value);
               }}
             />
           </div>
@@ -186,7 +189,7 @@ const App = () => {
 
           <div className="field">
             <label>Languages</label>
-            <Search
+            <Select
               options={languageOptions}
               components={animatedComponenets}
               isMulti
