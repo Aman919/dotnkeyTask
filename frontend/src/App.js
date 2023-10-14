@@ -56,11 +56,11 @@ const App = () => {
 
   return (
     <div className="container">
-      {Object.keys(formErrors).length === 0 && isSubmit ? (
+      {/* {Object.keys(formErrors).length === 0 && isSubmit ? (
         <div className="ui message success">User created Sucessfully</div>
       ) : (
         <pre>{JSON.stringify(formValues, undefined, 2)}</pre>
-      )}
+      )} */}
 
       <form onSubmit={handleSubmit}>
         <div className="ui divider"></div>
@@ -172,6 +172,8 @@ const App = () => {
             />
           </div>
           <p>{formErrors.isActive}</p>
+          <button className="fluid ui button">Cancel</button>
+          <button className="fluid ui button">Save</button>
         </div>
       </form>
     </div>
