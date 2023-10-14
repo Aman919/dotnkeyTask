@@ -1,50 +1,82 @@
 import express from "express";
 import { PORT, mongoDBURL } from "./config.js";
 import mongoose from "mongoose";
-import { Form } from "./models/formModel.js";
-import cors from 'cors';
+import { User } from "./models/formModel.js";
+import cors from "cors";
 
 const app = express();
 
-// app.use(express.json());
-// app.use(cors())
+app.use(express.json());
+app.use(cors());
 
 app.get("/", (request, response) => {
-  console.log(request);
-  return response.status(234).send("Welcome");
+  return response.status(200).send("Welcome");
 });
 
 //Route to save a new entry
-app.post("/addUser", async (request, response) => {
+app.post("/users", async (request, response) => {
   try {
-    if (
-      !request.body.fullname ||
-      !request.body.email ||
-      !request.body.country ||
-      !request.body.state ||
-      !request.body.city ||
-      !request.body.language
-    ) {
+    const { fullname, email, country, state, city, language } = reque.body;
+    if (!fullname || !email || !country || !state || !city || !language) {
       return response.status(400).send({
         message: "Send all required fields",
       });
-
-      const newUser = {
-        fullname: request.body.fullname,
-        email: request.body.email,
-        country: request.body.country,
-        state: request.body.state   ,
-        city: request.body.city,
-        language: request.body.language
-      };
-      const form = await Form.create(newUser)
-
-      return response.status(201).send(newUser)
     }
+    const newUser = new User({
+      fullname,
+      email,
+      country,
+      state,
+      city,
+      language,
+    });
+    await newUser.save();
+
+    return response.status(201).send(form);
   } catch (error) {
     console.log(error.message);
     response.status(500).send({ message: error.message });
   }
+});
+
+//get a list of all users
+app.get("/users", async (request, response) => {
+  try {
+    const users = await User.find();
+    return response.status(200).json(users);
+  } catch (error) {
+    console.error("ERror fetching  users: ", error);
+    response.status(500).json({ message: "internal server error" });
+  }
+});
+
+//get user details by ID
+app.get("/users/:id", async (request, response) => {
+  try {
+    const user = await User.findById(request.params.id);
+    if (!user) {
+      return response.status(404).json({ message: "User not found" });
+    }
+    return response.status(200).json(user);
+  } catch (error) {
+    console.error("ERror fetching  users: ", error);
+    response.status(500).json({ message: "internal server error" });
+  }
+});
+
+//Delete user by id
+app.delete("/users/:id", async(request, response)=>{
+    try{
+        const deletedUser = await User.findByIdAndDelete(request.params.id);
+        if (!deletedUser){
+            return response.status(404).json({message: "User not found"});
+
+        }
+        return response.status(204).send();
+    } catch(error){
+        console.error("ERror fetching  users: ", error);
+    response.status(500).json({ message: "internal server error" });
+    }
 });
 
 mongoose

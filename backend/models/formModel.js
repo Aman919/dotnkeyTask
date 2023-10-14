@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const formModel = mongoose.Schema({
+const userSchema = new mongoose.Schema({
   // fullname, email, country, state, city, language, date,   actions
   fullname: {
     type: String,
@@ -25,12 +25,8 @@ const formModel = mongoose.Schema({
   language: {
     type: String,
     required: true,
-  },
-  date: {
-    type: String,
-    required: true,
-  },
+  }
   // timestamps: true
 });
 
-export const Form = mongoose.model("Form", formModel);
+export const User = mongoose.model("User", userSchema);
