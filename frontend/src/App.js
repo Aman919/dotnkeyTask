@@ -1,24 +1,55 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
 
 const App = () => {
   const initialValues = {
     fullName: "",
     email: "",
     password: "",
-    countryId: "",
-    stateId: "",
-    cityId: "",
-    language: "",
+    countryId: null,
+    stateId: null,
+    cityId: null,
+    language: [],
     confirm_password: "",
     isActive: false,
   };
 
   const [formValues, setFormValues] = useState(initialValues);
-  const [formErrors, setFormErrors] = useState({});
-  const [isSubmit, setIsSubmit] = useState(false);
+  // const [formErrors, setFormErrors] = useState({});
+  // const [isSubmit, setIsSubmit] = useState(false);
 
-  const handleChange = (e) => {
+  //Options for country, state, city
+  const countryOptions = [
+    { value: "india", label: "India" },
+    { value: "canada", label: "USA" },
+    { value: "usa", label: "USA" },
+  ];
+  const stateOptions = [
+    { value: "ny", label: "New York", country: "usa" },
+    { value: "ca", label: "California", country: "usa" },
+    { value: "up", label: "Uttar Pradesh", country: "India" },
+    { value: "blr", label: "Bangalore", country: "India" },
+  ];
+
+  const cityOptions = [
+    { value: "nyc", label: "New York City", country: "usa" },
+    { value: "la", label: "Los Angeles", country: "ca" },
+    { value: "Allahabad", label: "Uttar Pradesh", country: "India" },
+    { value: "Hsr", label: "Bangalore", country: "India" },
+  ];
+
+  const languageOptions = [
+    { value: "english", label: "English" },
+    { value: "spanish", label: "Spanish" },
+    { value: "french", label: "French" },
+    { value: "hindi", label: "Hindi" },
+  ];
+
+  const animatedComponenets = makeAnimated();
+
+  const handleChange = (name, value) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
   };
@@ -61,7 +92,7 @@ const App = () => {
       ) : (
         <pre>{JSON.stringify(formValues, undefined, 2)}</pre>
       )} */}
-
+      <h1>Manage Customer</h1>
       <form onSubmit={handleSubmit}>
         <div className="ui divider"></div>
         <div className="ui form">
@@ -72,7 +103,9 @@ const App = () => {
               name="fullName"
               placeholder="Enter Full Name"
               value={formValues.fullName}
-              onchange={handleChange}
+              onchange={(e) => {
+                handleChange("fullName", e.target.value);
+              }}
             />
           </div>
           <p>{formErrors.fullName}</p>
@@ -84,7 +117,9 @@ const App = () => {
               name="email"
               placeholder="Enter Email"
               value={formValues.email}
-              onchange={handleChange}
+              onChange={(e) => {
+                handleChange("email", e.target.value);
+              }}
             />
           </div>
           <p>{formErrors.email}</p>
@@ -96,7 +131,9 @@ const App = () => {
               name="password"
               placeholder="Password"
               value={formValues.password}
-              onchange={handleChange}
+              onChange={(e) => {
+                "password", e.target.value;
+              }}
             />
           </div>
           <p>{formErrors.password}</p>
@@ -108,58 +145,56 @@ const App = () => {
               name="confirm_password"
               placeholder="Enter confirm Password"
               value={formValues.confirm_password}
-              onchange={handleChange}
+              onChange={handleChange}
             />
           </div>
           <p>{formErrors.confirm_assword}</p>
 
           <div className="field">
             <label>Country</label>
-            <input
-              type="text"
-              name="Country"
-              placeholder="Select Country"
+            <Select
+              options={countryOptions}
               value={formValues.countryId}
-              onchange={handleChange}
+              onChange={(selected) => handleChange("country", selected)}
+              isSearchable
             />
           </div>
-          <p>{formErrors.countryId}</p>
 
           <div className="field">
             <label>State</label>
-            <input
-              type="text"
-              name="state"
-              placeholder="Select State"
-              value={formValues.stateId}
-              onchange={handleChange}
+            <Select
+              options={stateOptions}
+              value={formValues.state}
+              onChange={(selected) => {
+                handleChange("state", selected);
+              }}
+              isSearchable
             />
           </div>
-          <p>{formErrors.stateId}</p>
 
           <div className="field">
             <label>City</label>
-            <input
-              type="text"
-              name="city"
-              placeholder="Select City"
+            <Select
+              options={cityOptions}
               value={formValues.city}
-              onchange={handleChange}
+              onChange={(selected) => {
+                handleChange("city", selected);
+              }}
+              isSearchable
             />
           </div>
-          <p>{formErrors.city}</p>
 
           <div className="field">
-            <label>Language</label>
-            <input
-              type="text"
-              name="language"
-              placeholder="Select Multiple language"
-              value={formValues.language}
-              onchange={handleChange}
+            <label>Languages</label>
+            <Search
+              options={languageOptions}
+              components={animatedComponenets}
+              isMulti
+              value={formValues.languages}
+              onChange={handleLanguageChange}
+              isSearchable
             />
           </div>
-          <p>{formErrors.language}</p>
 
           <div className="field">
             <label>Active</label>
@@ -167,13 +202,17 @@ const App = () => {
               type="checkbox"
               name="isActive"
               placeholder="Active"
-              value={formValues.isActive}
-              onchange={handleChange}
+              checked={formValues.isActive}
+              onChange={(e) =>
+                setFormValues({ ...formValues, isActive: e.target.checked })
+              }
             />
           </div>
           <p>{formErrors.isActive}</p>
-          <button className="fluid ui button">Cancel</button>
-          <button className="fluid ui button">Save</button>
+          <button className="ui button">Cancel</button>
+          <button type="submit" className="ui button">
+            Save
+          </button>
         </div>
       </form>
     </div>
