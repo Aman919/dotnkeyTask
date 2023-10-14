@@ -1,7 +1,24 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { useTable, usePagination } from "react-table";
 
-const UserTable = ({ data }) => {
+const UserTable = () => {
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(()=>{
+        axios.get('/user/users')
+        .then(response=>{
+            setData(response.data.data);
+            setLoading(false);
+        })
+        .catch(error=>{
+            console.error('Error fetching users:', error);
+            setLoading(false);
+        })
+    }, [])
+
+
   const columns = React.useMemo(
     () => [
       { Header: "ID", accessor: "id" },

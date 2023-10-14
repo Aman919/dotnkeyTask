@@ -44,7 +44,7 @@ const customerSchema = new mongoose.Schema({
   },
   ModifiedDate:{
     type: Date, 
-    required: ture
+    required: true
   }
   // timestamps: true
 });

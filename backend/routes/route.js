@@ -1,5 +1,5 @@
 import express from "express";
-import { Customer } from "../models/customerModel";
+import { Customer } from "../models/customerModel.js";
 
 const router = express.Router();
 
@@ -39,7 +39,7 @@ router.get("/users", async (request, response) => {
         data: users,
     });
   } catch (error) {
-    console.error("ERror fetching  users: ", error);
+    console.error("Error fetching  users: ", error);
     response.status(500).json({ message: "internal server error" });
   }
 });
