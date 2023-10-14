@@ -51,7 +51,20 @@ const App = () => {
 
   const handleChange = (name, value) => {
     setFormValues({ ...formValues, [name]: value });
+
+    if (name==="password"||name==="confirm_password"){
+      validatePasswordConfirmation(formValues.password, formValues.confirm_password);
+    }
   };
+
+  const validatePasswordConfirmation = (password, confirm_password)=>{
+    if (password !== confirm_password){
+      setFormErrors({...formErrors, confirm_password: "Passwords do not match"});
+
+    } else {
+      setFormErrors({...formErrors, confirm_password: ""})
+    }
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -106,7 +119,7 @@ const App = () => {
               name="fullName"
               placeholder="Enter Full Name"
               value={formValues.fullName}
-              onchange={(e) => {
+              onChange={(e) => {
                 handleChange("fullName", e.target.value);
               }}
             />
@@ -148,7 +161,7 @@ const App = () => {
               name="confirm_password"
               placeholder="Enter confirm Password"
               value={formValues.confirm_password}
-              onChange={handleChange}
+              onChange={(e)=>handleChange("confirm_password", e.target.value)}
             />
           </div>
           <p>{formErrors.confirm_assword}</p>
@@ -167,7 +180,7 @@ const App = () => {
             <label>State</label>
             <Select
               options={stateOptions}
-              value={formValues.state}
+              value={formValues.stateId}
               onChange={(selected) => {
                 handleChange("state", selected);
               }}
@@ -179,7 +192,7 @@ const App = () => {
             <label>City</label>
             <Select
               options={cityOptions}
-              value={formValues.city}
+              value={formValues.cityId}
               onChange={(selected) => {
                 handleChange("city", selected);
               }}
@@ -193,7 +206,7 @@ const App = () => {
               options={languageOptions}
               components={animatedComponenets}
               isMulti
-              value={formValues.languages}
+              value={formValues.language}
               onChange={handleLanguageChange}
               isSearchable
             />
